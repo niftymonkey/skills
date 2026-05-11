@@ -21,6 +21,7 @@ By default the CLI installs at project scope (`./<agent>/skills/`). Use `-g` for
 
 ## Skills
 
+- [**continue**](./skills/continue/SKILL.md) — Capture full session state to a `continue.md` file so a brand-new conversation can resume exactly where this one ended. Useful when the context window is filling up, before stopping mid-task, or any time you want a clean hand-off to a fresh session. ([history](./history/continue.md))
 - [**pr-feedback**](./skills/pr-feedback/SKILL.md) — Address code review comments on a GitHub PR systematically. Fixes code, pushes changes, and responds inline to every comment with either the fix or specific reasoning for dismissing. Uses `gh` CLI. ([history](./history/pr-feedback.md))
 
 ## How a skill arrives here
