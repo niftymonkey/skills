@@ -21,7 +21,7 @@ By default the CLI installs at project scope (`./<agent>/skills/`). Use `-g` for
 
 ## Skills
 
-*(none published yet — first promotion pending)*
+- [**pr-feedback**](./skills/pr-feedback/SKILL.md) — Address code review comments on a GitHub PR systematically. Fixes code, pushes changes, and responds inline to every comment with either the fix or specific reasoning for dismissing. Uses `gh` CLI. ([history](./history/pr-feedback.md))
 
 ## How a skill arrives here
 
