@@ -1,7 +1,7 @@
 ---
 skill: continue
 created: 2026-05-06
-current-version: v2
+current-version: v3
 status: published
 ---
 
@@ -54,6 +54,12 @@ Result: `SKILL.md` dropped from 141 → 83 lines; `TEMPLATE.md` holds the 56-lin
 `disable-model-invocation: true` and `allowed-tools` frontmatter remain Claude-Code-flavored — they're unknown fields to other agents but should be ignored safely. The behavior risk on non-Claude agents is mild: worst case is a slightly more eager auto-trigger based on description matching rather than explicit `/continue` invocation, and the skill itself works correctly when fired.
 
 Source-of-truth moved from `~/dev/niftymonkey/claude/skills/continue/` to `~/dev/niftymonkey/skills/skills/continue/` + `~/dev/niftymonkey/skills/history/continue.md`. Status flipped to `published`.
+
+### 2026-05-10 — v3 (companion-files structural migration)
+
+`TEMPLATE.md` moved from `skills/continue/TEMPLATE.md` (real file) to `companion-files/TEMPLATE.md` (canonical location) + `skills/continue/TEMPLATE.md` (symlink). No functional change for installers — `npx skills add` resolves the symlink in both symlink mode (chained symlinks to the canonical content) and copy mode (file copied through). Authoring-side benefit: edits to the template happen in one place, and future skills that also need a markdown template can reference the same canonical file rather than maintaining their own.
+
+This is the first migration to the repo-wide `companion-files/` shared-content pattern (see `companion-files/README.md` for the index). Prepares the ground for subsequent promotions where shared content across skills can sit in one place.
 
 ## Design uncertainties
 
