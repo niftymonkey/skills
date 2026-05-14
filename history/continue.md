@@ -1,7 +1,7 @@
 ---
 skill: continue
 created: 2026-05-06
-current-version: v5
+current-version: v6
 status: published
 ---
 
@@ -15,11 +15,11 @@ The skill exists to bridge that gap with an explicit, conventional `continue.md`
 
 ## How it works (brief)
 
-`/continue` (optionally with an argument describing what the next session will focus on) writes a handoff document to a unique path in the OS temp directory (`mktemp -t continue-XXXXXX.md` on Unix-like systems; equivalent generated filename in `$env:TEMP` on native Windows). The doc captures arc-bearing context (completed work, decisions, failures, discoveries) and current-focus state (active goal, current step, next steps, open questions) so a brand-new conversation can resume the work without ramp-up.
+`/continue` (optionally with a slug like `/continue refactor-x`) writes or updates a handoff document at `./continue.md` (or `./continue-<slug>.md` for multi-task projects) in the current working directory. The doc captures arc-bearing context (completed work, decisions, failures, discoveries) and current-focus state (active goal, current step, next steps, open questions) so a brand-new conversation can resume the work without ramp-up.
 
 The assumption baked into the skill: the next conversation will only see the project's instruction files (e.g., `CLAUDE.md`), the auto-loaded portion of any agent memory, and the handoff file. Anything else needed to resume goes in the handoff.
 
-The skill leans on the model's prior on what handoff documents look like rather than dictating a rigid template. Arc-bearing vs current-focus discipline (in the SKILL.md body) prevents recency bias; references to existing artifacts (PRDs, plans, ADRs, research docs, etc.) prevent the handoff from becoming a content-duplicating encyclopedia. Research that isn't externalized to its own doc is explicitly carved out as an inline exception.
+The skill leans on the model's prior on what handoff documents look like rather than dictating a rigid template. Arc-bearing vs current-focus discipline prevents recency bias; references to existing artifacts (PRDs, plans, ADRs, research docs, etc.) prevent the handoff from becoming a content-duplicating encyclopedia. Research that isn't externalized to its own doc is explicitly carved out as an inline exception. Storage is cwd-based so N parallel sessions across N projects each get their own handoff naturally.
 
 See `SKILL.md` for the full guidance.
 
@@ -109,19 +109,25 @@ The rewrite is near-total but preserves what differentiates `continue` from Poco
 
 Shortened the frontmatter description from ~350 characters across three concerns (what + when + trigger phrases) to ~90 characters of just "what." The long version crowded the slash-command autocomplete dropdown. Trigger phrases dropped as dead weight under `disable-model-invocation: true`; the "Use when..." guidance lives in the SKILL.md body anyway.
 
+### 2026-05-13 — v6 (revert storage to cwd; multi-project parallel sessions)
+
+v4's `mktemp` approach optimized for "one user, one session, no project context" and broke the user's actual workflow: N parallel Claude sessions across N projects, each `/continue` at end of day, each resumed next day. With `mktemp` + `/tmp`, all handoffs collapsed into one global namespace and "Read the most recent" couldn't disambiguate. Per-project context was lost.
+
+Reverted the storage approach to v3's cwd-based pattern (`./continue.md`, or `./continue-<slug>.md` for multi-task projects). Re-added the gitignore management (`.git/info/exclude`) and update-in-place semantics that v3 had. Kept all v4 content improvements: arc-bearing vs current-focus discipline, don't-duplicate rule, research-findings carve-out, suggest-skills line, compaction acknowledgment, lean prose flow. `argument-hint` reverted from forward-pointing ("what the next session will focus on") to slug semantics (`"[optional-slug]"`). Description shifted to cwd-centric framing.
+
 ## Design uncertainties
 
 - Whether the skill should also write a sibling `MEMORY.md` entry pointing at the handoff file, or whether keeping the two systems disjoint is intentional.
 - Whether to add automatic invocation triggers (e.g., on PreCompact) or keep it strictly user-triggered.
 - For non-Claude-Code agents that don't respect `disable-model-invocation: true`, whether the skill should add a stronger in-body discipline (*"only act on explicit user invocation"*) to deter eager phrase-matching triggers. Observe real behavior first.
-- Cross-platform path generation: the SKILL.md documents both `mktemp` and the Windows fallback, but doesn't enforce or test either. If real installers hit issues on a specific platform, may need a more prescriptive shape than the current "do the right thing for your platform" guidance.
-- No-template-shape: trusting the model to adapt the doc structure to the situation is the v4 bet. If outputs end up inconsistent or low-quality across runs, a lightweight schema (not a full template) may need to come back.
+- No-template-shape: trusting the model to adapt the doc structure to the situation is the v4 bet (still in effect in v6). If outputs end up inconsistent or low-quality across runs, a lightweight schema (not a full template) may need to come back.
+- Non-git projects: the gitignore step in v6 uses `git check-ignore` which fails outside a git repo. The skill should detect non-git working directories and skip the gitignore step gracefully rather than surfacing an error. Not addressed in v6; observe real behavior first.
 
 ## Files
 
 In `niftymonkey/skills/skills/continue/` (runtime content, installed by `npx skills add`):
 
-- `SKILL.md` — frontmatter, handoff-writing guidance (cross-platform path creation, no-duplication rule, research-findings exception, suggest-skills line), arc-bearing vs current-focus discipline, compaction handling, after-write output
+- `SKILL.md` — frontmatter, four-step process (file selection, gitignore management, write-or-update with header metadata, resume prompt), content guidance (arc-bearing vs current-focus, don't-duplicate rule with research-findings exception, suggest-skills), cleanup
 
 In `niftymonkey/skills/history/` (archival, not installed):
 
