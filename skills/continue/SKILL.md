@@ -1,6 +1,6 @@
 ---
 name: continue
-description: Compact the current conversation into a handoff document so a fresh session can pick up the work. Use when stopping mid-task, when context starts to feel full, or whenever a clean resume point is wanted. Triggers on /continue or phrases like "save state", "write a continue doc", "preserve context for next session".
+description: Compact the current conversation into a handoff document for a fresh session to pick up.
 allowed-tools: Read, Write, Bash
 disable-model-invocation: true
 argument-hint: "what the next session will focus on (optional)"

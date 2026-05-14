@@ -1,7 +1,7 @@
 ---
 skill: continue
 created: 2026-05-06
-current-version: v4
+current-version: v5
 status: published
 ---
 
@@ -104,6 +104,10 @@ The rewrite is near-total but preserves what differentiates `continue` from Poco
 
 - `promote-skill` should grow an OS-portability check category — its current `CHECKS.md` audits user-specific concerns (paths, CLIs, credentials) but doesn't catch Unix-only tooling (mktemp, awk, realpath, BSD-vs-GNU flag differences, etc.) that breaks on Windows installers. Would have caught the `mktemp` issue at promote time.
 - Trigger-phrase rewording: the description still implies "use when stopping" / "use when context is filling up," which is too late if compaction has already happened. Future iteration could suggest invoking `/continue` periodically (e.g., every 30–50% context growth) on long sessions.
+
+### 2026-05-13 — v5 (autocomplete-friendly description)
+
+Shortened the frontmatter description from ~350 characters across three concerns (what + when + trigger phrases) to ~90 characters of just "what." The long version crowded the slash-command autocomplete dropdown. Trigger phrases dropped as dead weight under `disable-model-invocation: true`; the "Use when..." guidance lives in the SKILL.md body anyway.
 
 ## Design uncertainties
 
