@@ -1,7 +1,7 @@
 ---
 skill: continue
 created: 2026-05-06
-current-version: v3
+current-version: v4
 status: published
 ---
 
@@ -15,13 +15,13 @@ The skill exists to bridge that gap with an explicit, conventional `continue.md`
 
 ## How it works (brief)
 
-`/continue` (optionally with a slug like `/continue refactor-x`) writes or updates a `continue.md` capturing the complete state of the current task: what was attempted, what worked, what failed and why, open questions, next step, and any context the next session needs that wouldn't survive in the agent's own memory alone.
+`/continue` (optionally with an argument describing what the next session will focus on) writes a handoff document to a unique path in the OS temp directory (`mktemp -t continue-XXXXXX.md` on Unix-like systems; equivalent generated filename in `$env:TEMP` on native Windows). The doc captures arc-bearing context (completed work, decisions, failures, discoveries) and current-focus state (active goal, current step, next steps, open questions) so a brand-new conversation can resume the work without ramp-up.
 
-The assumption baked into the skill: the next conversation will only see the project's instruction files (e.g., `CLAUDE.md`), the auto-loaded portion of any agent memory, and `continue.md`. Anything else needed to resume goes in `continue.md`.
+The assumption baked into the skill: the next conversation will only see the project's instruction files (e.g., `CLAUDE.md`), the auto-loaded portion of any agent memory, and the handoff file. Anything else needed to resume goes in the handoff.
 
-The markdown template for the output lives in `TEMPLATE.md` (companion file loaded on-demand) rather than embedded in `SKILL.md`, so the runtime cost of invoking the skill stays low.
+The skill leans on the model's prior on what handoff documents look like rather than dictating a rigid template. Arc-bearing vs current-focus discipline (in the SKILL.md body) prevents recency bias; references to existing artifacts (PRDs, plans, ADRs, research docs, etc.) prevent the handoff from becoming a content-duplicating encyclopedia. Research that isn't externalized to its own doc is explicitly carved out as an inline exception.
 
-See `SKILL.md` for the step-by-step capture flow.
+See `SKILL.md` for the full guidance.
 
 ## Iteration log
 
@@ -61,20 +61,63 @@ Source-of-truth moved from `~/dev/niftymonkey/claude/skills/continue/` to `~/dev
 
 This is the first migration to the repo-wide `companion-files/` shared-content pattern (see `companion-files/README.md` for the index). Prepares the ground for subsequent promotions where shared content across skills can sit in one place.
 
+### 2026-05-10 — v4 (Pocock-influenced rewrite + recency-bias pushback)
+
+Triggered by two things: a real-world failure on a long-running conversation (near 1M tokens) where `continue.md` captured only the most recent 5–10% of the session, and Matt Pocock's release of a `handoff` skill that's structurally similar to `continue` but radically shorter. Comparing the two surfaced patterns worth adopting and made our v3 SKILL.md look over-specified.
+
+The rewrite is near-total but preserves what differentiates `continue` from Pocock's `handoff`:
+
+**Adopted from Pocock's `handoff` (in our own wording):**
+
+- `mktemp -t continue-XXXXXX.md` for path uniqueness, with our `continue-` prefix. Replaces v3's slug logic, gitignore management, and overwrite/update semantics with a single shell command. Files land in the OS temp directory — never in any working tree, never an artifact that needs ignoring.
+- *"Do not duplicate content already captured in other artifacts."* PRDs, plans, ADRs, research docs, GitHub issues, commits, diffs all get referenced by path or URL rather than restated. The handoff is glue, not encyclopedia. Major content-reducer.
+- Forward-pointing `argument-hint`: the user states what the next session will focus on, and the doc is tailored accordingly. Removes the implicit pressure to capture *everything*.
+- *"Suggest skills the next session should use, if any."* Compositional thinking; the handoff explicitly connects to the rest of the skill ecosystem.
+- No mandatory template. The model adapts the doc shape to the situation rather than forcing a 5-minute blocker handoff and a multi-day arc handoff into the same mold.
+- Light prose flow instead of numbered steps.
+
+**Preserved from v3 — the `continue`-specific differentiator:**
+
+- **Arc-bearing vs current-focus distinction.** The recency-bias problem is real and is what triggered this whole iteration. Without explicit push-back, the model writes a doc that captures only the last 5–10% of the session. The body keeps the two-paragraph guidance: arc-bearing sections (completed work, decisions, failures, discoveries) must reflect the full conversation; current-focus sections (goal, current step, next, open questions) stay tight on the active work. Conflating the two destroys the doc in both directions.
+- **Compaction acknowledgment.** Long conversations are likely operating on auto-summarized context (Claude Code does this without user invocation past several hundred thousand tokens). The skill instructs the writer to treat summaries as canonical for the segments they cover, not invent detail beyond them, and note when content is drawn from a summary so the resuming conversation knows where fidelity is reduced.
+- **Resume prompt output** — small but useful for the user when starting the next session.
+
+**New in v4 (not in Pocock's, not in our v3):**
+
+- **Research findings exception.** Research is the most expensive thing for a fresh session to redo. When it isn't saved to its own doc — often the case in practice — the handoff should capture findings inline with sources, exact strings, and conclusions. Carve-out from the "don't duplicate other artifacts" rule.
+- **Cross-platform path guidance.** `mktemp` is Unix only. Native Windows (without WSL or Git Bash) doesn't have it. The skill explicitly documents the Windows fallback: generate an equivalent unique filename in `$env:TEMP` and create the file via Write. Avoids the silent `command not found` failure on Windows.
+
+**Dropped from v3:**
+
+- "Why this exists" backstory section (~10 lines) — modern models know what a handoff doc is; heavy framing was over-specification.
+- Numbered step structure (1. Pick file, 2. Gitignore, 3. Metadata, etc.) — replaced with light prose flow.
+- Slug-based multi-doc support — `mktemp` (or the Windows equivalent) handles uniqueness without per-slug logic.
+- Gitignore management — files in the OS temp directory are out of any working tree.
+- Explicit metadata-gathering step — the model knows to grab git context if relevant.
+- Quality bar section — replaced by the arc-bearing-vs-current-focus body section, which carries the same criteria inline.
+- Cleanup section — OS temp directories are ephemeral; the OS handles it.
+- `TEMPLATE.md` companion file (and its `companion-files/` canonical version + symlink) — no template means the doc adapts to the situation. Updated `companion-files/README.md` to reflect the empty index.
+
+**Result:** SKILL.md is roughly half its v3 length while addressing two failure modes Pocock's `handoff` doesn't (recency bias on long sessions; OS-portability on Windows) and one practice gap his version also has (research findings that weren't externalized).
+
+**Follow-ups tracked for separate iterations:**
+
+- `promote-skill` should grow an OS-portability check category — its current `CHECKS.md` audits user-specific concerns (paths, CLIs, credentials) but doesn't catch Unix-only tooling (mktemp, awk, realpath, BSD-vs-GNU flag differences, etc.) that breaks on Windows installers. Would have caught the `mktemp` issue at promote time.
+- Trigger-phrase rewording: the description still implies "use when stopping" / "use when context is filling up," which is too late if compaction has already happened. Future iteration could suggest invoking `/continue` periodically (e.g., every 30–50% context growth) on long sessions.
+
 ## Design uncertainties
 
-- Whether the skill should also write a sibling `MEMORY.md` entry pointing at the `continue.md`, or whether keeping the two systems disjoint is intentional.
-- Whether `continue-<slug>.md` files should accumulate (one per task) or be overwritten — current behavior favors overwrite.
+- Whether the skill should also write a sibling `MEMORY.md` entry pointing at the handoff file, or whether keeping the two systems disjoint is intentional.
 - Whether to add automatic invocation triggers (e.g., on PreCompact) or keep it strictly user-triggered.
-- For non-Claude-Code agents that don't respect `disable-model-invocation: true`, whether the skill should add a stronger in-body discipline (*"only act on explicit user invocation"*) to deter eager phrase-matching triggers. Not addressed in v2 — observe real behavior first.
-- The 200-line limit referenced in "Why this exists" is Claude Code's specific number. Other agents have different limits; pinning to "~200 lines" risks being inaccurate for Cursor / Codex / etc. Considered making the number more vague (*"size-bounded"*) but the concrete example helps Claude Code users; left as-is with the "Claude Code, for example" framing carrying the qualifier.
+- For non-Claude-Code agents that don't respect `disable-model-invocation: true`, whether the skill should add a stronger in-body discipline (*"only act on explicit user invocation"*) to deter eager phrase-matching triggers. Observe real behavior first.
+- Cross-platform path generation: the SKILL.md documents both `mktemp` and the Windows fallback, but doesn't enforce or test either. If real installers hit issues on a specific platform, may need a more prescriptive shape than the current "do the right thing for your platform" guidance.
+- No-template-shape: trusting the model to adapt the doc structure to the situation is the v4 bet. If outputs end up inconsistent or low-quality across runs, a lightweight schema (not a full template) may need to come back.
 
 ## Files
 
 In `niftymonkey/skills/skills/continue/` (runtime content, installed by `npx skills add`):
 
-- `SKILL.md` — slash command definition, step-by-step capture flow, gitignore check, metadata gathering, write/update logic, resume-prompt output, quality bar, cleanup guidance
-- `TEMPLATE.md` — the markdown skeleton for `continue.md` output (loaded on-demand at step 4)
+- `SKILL.md` — frontmatter, handoff-writing guidance (cross-platform path creation, no-duplication rule, research-findings exception, suggest-skills line), arc-bearing vs current-focus discipline, compaction handling, after-write output
 
 In `niftymonkey/skills/history/` (archival, not installed):
 

@@ -1,1 +1,0 @@
-../../companion-files/TEMPLATE.md
