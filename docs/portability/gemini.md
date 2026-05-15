@@ -6,7 +6,7 @@
 | **Verified** | 2026-05-14 |
 | **Harness version studied** | ~v0.27 release line; Gemini 3 default model; subagents shipped April '26 |
 | **Framework** | [`README.md`](./README.md) |
-| **Refresh recipe** | [`gemini.research-prompt.md`](./gemini.research-prompt.md) |
+| **Refresh recipe** | [`research-prompt.md`](./research-prompt.md) (general; supply preamble with harness name, URL, companion file `gemini.md`) |
 
 A snapshot of Gemini CLI's affordances, structured against the framework's nine categories. Treat facts as authoritative only against the `Verified:` date; primary-source links inline are how to re-verify.
 

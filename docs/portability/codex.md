@@ -6,7 +6,7 @@
 | **Verified** | 2026-05-14 |
 | **Harness version studied** | [`rust-v0.130.0`](https://github.com/openai/codex/releases/tag/rust-v0.130.0) (2026-05-08); `[features] hooks = true` Stable; subagents (`multi_agent`) Stable; default model `gpt-5.5` |
 | **Framework** | [`README.md`](./README.md) |
-| **Refresh recipe** | [`codex.research-prompt.md`](./codex.research-prompt.md) |
+| **Refresh recipe** | [`research-prompt.md`](./research-prompt.md) (general; supply preamble with harness name, URL, companion file `codex.md`) |
 
 A snapshot of OpenAI Codex CLI's affordances, structured against the framework's nine categories. Treat facts as authoritative only against the `Verified:` date; primary-source links inline are how to re-verify.
 

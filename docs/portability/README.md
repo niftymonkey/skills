@@ -10,7 +10,7 @@ This directory has two kinds of file. Treat them differently:
 
 - **This README — durable.** Affordance categories, facets, and portable-skill rules survive harness rev's. Update only when a genuinely new category appears (a harness ships an affordance no existing study had to describe), or when an existing rule is invalidated by cross-harness evidence.
 - **`<harness>.md` files — volatile snapshots.** Each is a point-in-time description of one harness. Trust them only against their `Verified:` date. Re-verify before relying on a specific fact.
-- **`<harness>.research-prompt.md` files — durable recipes.** The exact prompt to feed an agent to regenerate the corresponding study. Re-running it is how a study gets refreshed.
+- **`research-prompt.md` — durable recipe.** A single general prompt that researches *any* harness when prepended with a short preamble (harness name, canonical URL, companion-file name, optional Known-volatile bullets from the existing study). Re-running it is how a study gets refreshed or how a new harness study gets authored.
 
 The split keeps the framework rarely-touched and the studies refreshable on a known cadence. No changelogs — each study is a clean snapshot; git history is the change record.
 
@@ -20,12 +20,13 @@ The split keeps the framework rarely-touched and the studies refreshable on a kn
 
 - **`README.md`** (this file) — the framework: affordance categories, facets each category must describe, and rules for writing portable skills.
 - **`<harness>.md`** — one file per harness studied. Each is structured against the same facets, so studies diff and compare side-by-side.
-- **`<harness>.research-prompt.md`** — the prompt that produces or refreshes the corresponding study.
+- **`research-prompt.md`** — single general research recipe used to author or refresh any harness study. Operator supplies a short preamble at spawn time with harness name + URL + companion-file name + optional Known-volatile cues from the existing study.
 
 Current studies:
 
 - [`gemini.md`](./gemini.md) — Gemini CLI (`google-gemini/gemini-cli`).
-- *Planned: `codex.md` (OpenAI Codex CLI), `cursor.md`, others as adopted.*
+- [`codex.md`](./codex.md) — OpenAI Codex CLI (`openai/codex`).
+- *Planned: `cursor.md`, others as adopted.*
 
 (Claude Code is not a study — it's the implicit baseline. See [Claude Code reference state](#claude-code-reference-state) below.)
 
@@ -173,10 +174,11 @@ Every harness study carries three layers of freshness signal:
 
 **Re-verification procedure:**
 
-1. Run `<harness>.research-prompt.md` via an agent.
-2. Diff its output against the current `<harness>.md`.
-3. Update the study with changes; refresh the `Verified:` headers.
-4. Update the "Known volatile" / "Known stable" callouts based on what actually changed.
+1. Read the existing `<harness>.md`'s "Known volatile" section. Those are your re-verification anchors.
+2. Construct a preamble per [`research-prompt.md`](./research-prompt.md)'s "How to run" instructions — harness name, canonical URL, companion-file name, plus the Known-volatile bullets from step 1.
+3. Spawn a general-purpose agent with `<preamble> + <research-prompt.md body>`.
+4. Diff agent output against current `<harness>.md`; update what changed.
+5. Refresh the `Verified:` header and the "Known volatile" / "Known stable" callouts based on what actually changed.
 
 ---
 
@@ -249,12 +251,13 @@ Implementation sketch: a checklist in the `/promote-skill` pipeline that reads f
 
 **Adding a new harness:**
 
-1. Copy `gemini.md` to `<harness>.md` and `gemini.research-prompt.md` to `<harness>.research-prompt.md`.
-2. Edit the research prompt: swap the canonical implementation URL and any harness-specific terms.
-3. Run the research prompt via an agent.
-4. Rewrite each section of the harness study against the agent's output, filling in every facet (use `(none)` for absent affordances).
+1. Construct a preamble for [`research-prompt.md`](./research-prompt.md) per its "How to run" instructions — harness name, canonical implementation URL, companion-file name (the `<harness>.md` you'll create), distribution/package identifier.
+2. Spawn a general-purpose agent with `<preamble> + <research-prompt.md body>`. ~2–3 minutes.
+3. Copy `gemini.md` or `codex.md` as the structural template for `<harness>.md`.
+4. Rewrite each section of the new harness study against the agent's output, filling in every facet (use `(none)` for absent affordances). Cite primary sources inline.
 5. Populate the "Known volatile" / "Known stable" sections based on observed change-rate cues during research.
-6. Add an entry to the "Current studies" list above.
-7. If the harness surfaces a *new* affordance category the framework doesn't capture, add the category here in the README and backfill the existing studies (usually a short paragraph each).
+6. Add a "Cross-harness portability notes" section anchored to today's date, comparing against the [Claude Code reference state](#claude-code-reference-state) above.
+7. Add an entry to the "Current studies" list above.
+8. If the harness surfaces a *new* affordance category the framework doesn't capture, add the category here in the README and backfill the existing studies (usually a short paragraph each).
 
-**Refreshing an existing study:** same as steps 3–5 above, plus refresh the `Verified:` headers.
+**Refreshing an existing study:** see the "Re-verification procedure" in the Freshness model section above.
