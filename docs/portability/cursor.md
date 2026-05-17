@@ -2,15 +2,15 @@
 
 | | |
 |---|---|
-| **Harness** | [Cursor CLI](https://cursor.com/docs/cli/overview) (`cursor-agent`; closed-source; installed via `curl https://cursor.com/install`; the on-disk binary and shell command are both `agent`) |
+| **Harness** | [Cursor CLI](https://cursor.com/docs/cli/overview) (closed-source; installed via `curl https://cursor.com/install`; the binary and the command a user types are both `agent`; the CLI is also referred to as `cursor-agent`) |
 | **Verified** | 2026-05-17 |
-| **Harness version studied** | Cursor application release line 3.4 (2026-05-13); CLI ships on a rolling channel (`agent update`); skills require Cursor 2.4+; `cursor_version` in hook input observed as `1.7.x`-style strings |
+| **Harness version studied** | The CLI auto-updates on a rolling channel (`agent update`) and carries no fixed semver pin. At study time the `cursor_version` field in hook input reported `1.7.x`-style strings (the agent's own version). The Cursor desktop application, a separate version line, was on release 3.4 (2026-05-13); skills require Cursor 2.4 or later. |
 | **Framework** | [`README.md`](./README.md) |
 | **Refresh recipe** | [`research-prompt.md`](./research-prompt.md) (general; supply preamble with harness name, URL, companion file `cursor.md`) |
 
 A snapshot of the Cursor CLI's affordances, structured against the framework's nine categories. Treat facts as authoritative only against the `Verified:` date; primary-source links inline are how to re-verify.
 
-**Headline:** Cursor is closed-source, so every fact here traces to official `cursor.com/docs` pages rather than source. The CLI (`cursor-agent`, invoked as `agent`) shares its affordance surface with the Cursor IDE: same rules, skills, hooks, MCP config, and models. Cursor deliberately reads Claude Code and Codex on-disk layouts (`.claude/`, `.codex/`, `AGENTS.md`, `CLAUDE.md`) and accepts Claude Code's hook JSON formats, which makes it the most omnivorous port target studied so far. The divergence is the hook event vocabulary: Cursor has its own large, granular, lower-camelCase event set (`beforeShellExecution`, `afterFileEdit`, etc.) that does not name-match Claude's, even though Claude-named hooks are auto-mapped at load time.
+**Headline:** Cursor is closed-source, so every fact here traces to official `cursor.com/docs` pages rather than source. The CLI, invoked as the `agent` command, shares its affordance surface with the Cursor IDE: same rules, skills, hooks, MCP config, and models. Cursor deliberately reads Claude Code and Codex on-disk layouts (`.claude/`, `.codex/`, `AGENTS.md`, `CLAUDE.md`) and accepts Claude Code's hook JSON formats, which makes it the most omnivorous port target studied so far. The divergence is the hook event vocabulary: Cursor has its own large, granular, lower-camelCase event set (`beforeShellExecution`, `afterFileEdit`, etc.) that does not name-match Claude's, even though Claude-named hooks are auto-mapped at load time.
 
 ---
 
@@ -199,7 +199,7 @@ Project hooks run only in a **trusted workspace**. The `stop` and `subagentStop`
 - **Routing:** `Auto` is a router, not a fixed model. Cursor's own `Composer 2` model also draws from the same low-cost usage pool as `Auto`. The model that actually answered a turn is visible in `stream-json` `system`/`init` events (`"model"`) and in hook input.
 - **Reasoning / Max Mode:** `/max-mode [on|off]` toggles extended reasoning on models that support it. Provider-specific reasoning-effort variants exist (e.g., `gpt-5.2-high`, `sonnet-4.5-thinking`).
 - **Context window:** model-dependent; not surfaced as a single CLI-level number. The `preCompact` hook input reports `context_window_size` per conversation (the docs' example shows `128000`). Anthropic models support up to 1M tokens in Max Mode.
-- **Max output tokens:** *(reported, not verified)*, not surfaced in CLI docs.
+- **Max output tokens:** `(none)` documented. Not surfaced in CLI docs; model-dependent.
 - **Compaction:** automatic near the context limit, plus manual `/compress`. The `preCompact` hook observes (but cannot block) compaction and reports `trigger: "auto"|"manual"`.
 - **Available alternates:** broad. Cursor's API pool lists Anthropic (`Claude 4.5/4.6/4.7 Opus`, `Claude 4.5/4.6 Sonnet`, `Claude 4.5 Haiku`), OpenAI (`GPT-5`, `GPT-5.1/5.2/5.3 Codex` family, `GPT-5 Mini`), Google (`Gemini 3 Pro`, `Gemini 3.1 Pro`, `Gemini 3 Flash`), and Cursor's own `Composer 1/1.5/2`. Many are hidden by default and several require Max Mode.
 - **Known weaknesses:** Cursor is closed-source, so there is no public upstream issue tracker to cite for instruction-drift / long-session-degradation issues the way the Codex and Gemini studies cite GitHub issues. A community report ([forum thread](https://forum.cursor.com/t/cannot-use-default-model-in-latest-cursor-cli-version-on-grandfathered-plan/155372)) describes the `Auto` default model being temporarily unavailable on some plans after a usage-limit switch. Treat long-session behavior as model-dependent (it varies with whichever model `Auto` routed to) and undocumented at primary-source level. See Open questions.

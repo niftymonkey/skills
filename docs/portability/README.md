@@ -26,7 +26,9 @@ Current studies:
 
 - [`gemini.md`](./gemini.md) — Gemini CLI (`google-gemini/gemini-cli`).
 - [`codex.md`](./codex.md) — OpenAI Codex CLI (`openai/codex`).
-- [`cursor.md`](./cursor.md) - Cursor CLI (`cursor-agent`).
+- [`opencode.md`](./opencode.md) - OpenCode (`anomalyco/opencode`).
+- [`copilot-cli.md`](./copilot-cli.md): GitHub Copilot CLI (`github/copilot-cli`, npm `@github/copilot`).
+- [`cursor.md`](./cursor.md) - Cursor CLI (invoked as `agent`).
 - *Planned: others as adopted.*
 
 (Claude Code is not a study — it's the implicit baseline. See [Claude Code reference state](#claude-code-reference-state) below.)
