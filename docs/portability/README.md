@@ -26,7 +26,8 @@ Current studies:
 
 - [`gemini.md`](./gemini.md) — Gemini CLI (`google-gemini/gemini-cli`).
 - [`codex.md`](./codex.md) — OpenAI Codex CLI (`openai/codex`).
-- *Planned: `cursor.md`, others as adopted.*
+- [`cursor.md`](./cursor.md) - Cursor CLI (`cursor-agent`).
+- *Planned: others as adopted.*
 
 (Claude Code is not a study — it's the implicit baseline. See [Claude Code reference state](#claude-code-reference-state) below.)
 
