@@ -26,6 +26,7 @@ Current studies:
 
 - [`gemini.md`](./gemini.md) — Gemini CLI (`google-gemini/gemini-cli`).
 - [`codex.md`](./codex.md) — OpenAI Codex CLI (`openai/codex`).
+- [`opencode.md`](./opencode.md) - OpenCode (`anomalyco/opencode`).
 - *Planned: `cursor.md`, others as adopted.*
 
 (Claude Code is not a study — it's the implicit baseline. See [Claude Code reference state](#claude-code-reference-state) below.)
