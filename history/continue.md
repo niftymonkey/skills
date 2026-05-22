@@ -1,7 +1,7 @@
 ---
 skill: continue
 created: 2026-05-06
-current-version: v6
+current-version: v7
 status: published
 ---
 
@@ -115,6 +115,15 @@ v4's `mktemp` approach optimized for "one user, one session, no project context"
 
 Reverted the storage approach to v3's cwd-based pattern (`./continue.md`, or `./continue-<slug>.md` for multi-task projects). Re-added the gitignore management (`.git/info/exclude`) and update-in-place semantics that v3 had. Kept all v4 content improvements: arc-bearing vs current-focus discipline, don't-duplicate rule, research-findings carve-out, suggest-skills line, compaction acknowledgment, lean prose flow. `argument-hint` reverted from forward-pointing ("what the next session will focus on") to slug semantics (`"[optional-slug]"`). Description shifted to cwd-centric framing.
 
+### 2026-05-21: v7 (cold-context triage + redaction)
+
+Adds a three-tier triage for what an in-place update keeps, collapses, or graduates out of the handoff, so a `continue.md` carried across many resume cycles stops accreting cold context that dilutes the fresh start it exists to provide. Triggered by comparing `continue` against Pocock's `handoff` and the user observing their own handoffs still carrying context from 5-10 conversations earlier. Also adds redaction guidance and sweeps the file's pre-existing em dashes.
+
+- [SKILL.md:39] Step 3 update rule rewritten: "preserve What We've Tried entirely" is gone. "Entirely" forced unbounded accretion. Now it triages per "Keep the handoff current", and never discards the *verdict* of a failed attempt (the narrative is disposable once its outcome is committed).
+- [SKILL.md:68-78] New "Keep the handoff current" Content guidance subsection. Three tiers: Active stays inline verbatim; Superseded collapses to a one-line verdict; Revisitable graduates to an ADR, project context doc, or `docs/`. Dropping is citation-gated (a commit, PR, or ADR must capture the outcome). Promotions are proposed, not silently created.
+- [SKILL.md:90-92] New "Redact secrets" subsection: strip keys, tokens, passwords, connection strings, and PII before writing. A gitignored handoff can still be screen-shared or accidentally committed.
+- [SKILL.md] Swept 7 em dashes and 1 en dash to commas, colons, and parentheses. The file predated the no-em-dash rule.
+
 ## Design uncertainties
 
 - Whether the skill should also write a sibling `MEMORY.md` entry pointing at the handoff file, or whether keeping the two systems disjoint is intentional.
@@ -127,7 +136,7 @@ Reverted the storage approach to v3's cwd-based pattern (`./continue.md`, or `./
 
 In `niftymonkey/skills/skills/continue/` (runtime content, installed by `npx skills add`):
 
-- `SKILL.md` — frontmatter, four-step process (file selection, gitignore management, write-or-update with header metadata, resume prompt), content guidance (arc-bearing vs current-focus, don't-duplicate rule with research-findings exception, suggest-skills), cleanup
+- `SKILL.md`: frontmatter, four-step process (file selection, gitignore management, write-or-update with header metadata, resume prompt), content guidance (arc-bearing vs current-focus, keep-the-handoff-current cold-context triage, don't-duplicate rule with research-findings exception, suggest-skills, redact-secrets), cleanup
 
 In `niftymonkey/skills/history/` (archival, not installed):
 
