@@ -1,6 +1,7 @@
 {
   "name": "niftymonkey-skills",
   "skills": [
+    "./skills/architect-deep",
     "./skills/continue",
     "./skills/pr-feedback"
   ]
