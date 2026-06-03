@@ -3,6 +3,7 @@
   "skills": [
     "./skills/architect-deep",
     "./skills/continue",
+    "./skills/explore-idea",
     "./skills/pr-feedback"
   ]
 }
