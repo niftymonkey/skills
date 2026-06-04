@@ -5,6 +5,7 @@
     "./skills/continue",
     "./skills/explore-idea",
     "./skills/pr-feedback",
-    "./skills/seed-domain-language"
+    "./skills/seed-domain-language",
+    "./skills/write-prd"
   ]
 }
