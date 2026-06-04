@@ -25,6 +25,7 @@ By default the CLI installs at project scope (`./<agent>/skills/`). Use `-g` for
 - [**continue**](./skills/continue/SKILL.md): Capture full session state to a `continue.md` file so a brand-new conversation can resume exactly where this one ended. Useful when the context window is filling up, before stopping mid-task, or any time you want a clean hand-off to a fresh session. ([history](./history/continue.md))
 - [**explore-idea**](./skills/explore-idea/SKILL.md): Stress-test a plan, design, or idea through a relentless one-question-at-a-time interview, and optionally maintain a `DOMAIN-LANGUAGE.md` glossary and ADRs inline as decisions crystallize. Includes MIT companion files adapted from `grill-with-docs`. ([history](./history/explore-idea.md))
 - [**pr-feedback**](./skills/pr-feedback/SKILL.md): Address code review comments on a GitHub PR systematically. Fixes code, pushes changes, and responds inline to every comment with either the fix or specific reasoning for dismissing. Uses `gh` CLI. ([history](./history/pr-feedback.md))
+- [**seed-domain-language**](./skills/seed-domain-language/SKILL.md): Seed a project's `DOMAIN-LANGUAGE.md` glossary by mining the domain vocabulary already in its codebase, then refining it with you across context, per-cluster, and final review gates. A one-time bootstrap; companion to explore-idea, which maintains the glossary from there. Includes an MIT companion file adapted from `grill-with-docs`. ([history](./history/seed-domain-language.md))
 
 ## How a skill arrives here
 

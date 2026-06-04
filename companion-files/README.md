@@ -8,4 +8,4 @@ When `npx skills add` installs a skill in symlink mode, the symlink chain resolv
 
 | File | Used by |
 |---|---|
-| `DOMAIN-LANGUAGE-FORMAT.md` | `explore-idea` (format of the `DOMAIN-LANGUAGE.md` glossary it maintains). Adapted from Pocock's `grill-with-docs`, MIT. Shared with `seed-domain-language` once that skill is promoted. |
+| `DOMAIN-LANGUAGE-FORMAT.md` | `explore-idea` (format of the `DOMAIN-LANGUAGE.md` glossary it maintains) and `seed-domain-language` (format of the glossary it seeds). Adapted from Pocock's `grill-with-docs`, MIT. |

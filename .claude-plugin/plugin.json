@@ -4,6 +4,7 @@
     "./skills/architect-deep",
     "./skills/continue",
     "./skills/explore-idea",
-    "./skills/pr-feedback"
+    "./skills/pr-feedback",
+    "./skills/seed-domain-language"
   ]
 }
