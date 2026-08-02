@@ -1,7 +1,7 @@
 ---
 skill: explore-idea
 created: 2026-05-04
-current-version: v4
+current-version: v6
 status: published
 ---
 
@@ -76,6 +76,36 @@ Remediation applied during the `promote-skill` review before the move:
 Companion travel: `DOMAIN-LANGUAGE-FORMAT.md` is shared with `seed-domain-language`, so it was promoted under the single-source pattern rather than copied. The canonical file lives at `companion-files/DOMAIN-LANGUAGE-FORMAT.md`; each consuming skill carries a relative symlink (`skills/<name>/DOMAIN-LANGUAGE-FORMAT.md -> ../../companion-files/DOMAIN-LANGUAGE-FORMAT.md`). The `skills` CLI dereferences the symlink on install (`cp` with `dereference: true`), so a stranger receives real file content rather than a dangling link. Verified before commit by replicating the install-shape copy. This is the first use of the published repo's `companion-files/` single-source pattern, and it sets the template for `seed-domain-language` and `kickoff`.
 
 Source-of-truth moved from `~/dev/niftymonkey/claude/skills/explore-idea/` to `~/dev/niftymonkey/skills/skills/explore-idea/` + `history/explore-idea.md`. The shared `companion-files/DOMAIN-LANGUAGE-FORMAT.md` stays in the source repo too, still used there by the local `seed-domain-language` skill until that skill is promoted.
+
+### 2026-06-15, v5 (folded in the no-complexity-warnings interview rule)
+
+Added an interview rule: during endgame / dream-mapping, capture the user's ambitious choices without editorializing implementation complexity (defer feasibility to a separate phasing pass), while still surfacing genuine logical contradictions. Promoted from a dormant project-scoped memory (`feedback_no_complexity_warnings_during_endgame_mapping`) that only loaded from `~/dev` and so rarely fired, into the skill where it actually belongs. Origin of the rule: a 2026-05-23 explore session where per-choice complexity caveats pushed the user toward conservative answers and corrupted the dream-mapping data.
+
+### 2026-08-02, v6 (description carries the whole boundary against `grilling`)
+
+Came out of a kit-wide evaluation that found three grilling-lineage skills doing one job, with
+nothing in any description saying which to reach for. `explore-idea` descends from Pocock's
+`grill-with-docs` and reproduces the bare `grilling` interview protocol almost word for word, so the
+overlap is real rather than superficial.
+
+A first attempt split them by location: `explore-idea` inside a code repository, `grilling` outside
+one. Wrong, and the user caught it. That reading came from this skill's body being dense with
+repository material (`DOMAIN-LANGUAGE.md`, exploring the codebase, ADRs), but that section is gated
+on "**when** the session is rooted in a code repository". An enrichment, not a scope.
+
+**The axis is output.** `grilling` is a conversation that ends at shared understanding and leaves
+nothing behind. This skill is the same interview that lands as a document, carrying a raw
+just-thought-of-it idea through to the PRD-shaped end-of-session artifact. That is what it was built
+for.
+
+The new description states both sides, and deliberately claims the "grill me" phrasing when an idea
+should survive as a document. **`grilling` itself was left byte-identical to upstream on purpose:**
+it is a third-party skill, so a boundary written into its description would be silently erased by
+the next `npx skills update` while still reading as though both sides were stated. When two skills
+need telling apart and only one is yours, the whole distinction goes in the one you own.
+
+- SKILL.md: description rewritten from a one-line summary to a routing statement naming the artifact
+  it produces and when to use `grilling` instead
 
 ## Design uncertainties
 

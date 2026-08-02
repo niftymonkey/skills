@@ -1,6 +1,6 @@
 ---
 name: explore-idea
-description: Stress-test a plan, design, or idea through a relentless one-question-at-a-time interview.
+description: Interview the user one question at a time through every decision an idea implies, taking it from a raw just-thought-of-it notion to a written artifact: Problem/Opportunity, Target Users, Core Requirements, Key Decisions, Constraints, Open Questions, the outline of a PRD. Use whenever an idea should survive the conversation as a document, including when the user says "grill me" about one. Use grilling instead when you only need to think something through out loud and nothing needs writing down.
 disable-model-invocation: true
 ---
 
@@ -32,6 +32,7 @@ Interview me relentlessly about every aspect of this plan until we reach a share
 - **Cross-reference assertions against the code.** When the user says how something works, check. If the code disagrees, surface the contradiction immediately: *"You said X, but the code does Y. Which is right?"*
 - **Sharpen fuzzy language.** When a term is overloaded or vague, propose a precise canonical name. *"You said 'account': Customer or User? Those are different things."*
 - **Stress-test with concrete scenarios.** When relationships between concepts come up, invent edge cases that force precision on the boundaries. *"What happens if the Order is partially fulfilled and the Customer cancels?"*
+- **During endgame or dream-mapping, don't editorialize implementation complexity.** When the user is intentionally describing their ideal end state, capture each ambitious choice without "that's a lot of work" / "significant lift" / "near-frontier" caveats; defer feasibility to a separate phasing pass. Still surface a genuine logical contradiction between requirements (that is different from complexity, and the user needs to know).
 
 </what-to-do>
 
