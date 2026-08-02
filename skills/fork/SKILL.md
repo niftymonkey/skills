@@ -3,7 +3,6 @@ name: fork
 description: Branch a newly-surfaced task off the current conversation into a handoff document for a separate agent to pick up.
 argument-hint: "What will the next session be used for?"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
-disable-model-invocation: true
 ---
 
 > Adapted from [mattpocock/skills](https://github.com/mattpocock/skills), MIT License ([LICENSE](https://github.com/mattpocock/skills/blob/main/LICENSE)). Source: [skills/productivity/handoff](https://github.com/mattpocock/skills/blob/main/skills/productivity/handoff/SKILL.md).

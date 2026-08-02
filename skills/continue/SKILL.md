@@ -2,7 +2,6 @@
 name: continue
 description: Write a handoff document in the current working directory so a fresh session can resume the work.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
-disable-model-invocation: true
 argument-hint: "[optional-slug]"
 ---
 
