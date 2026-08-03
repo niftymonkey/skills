@@ -1,7 +1,7 @@
 ---
 skill: fork
 created: 2026-05-21
-current-version: v2
+current-version: v3
 status: published
 ---
 
@@ -41,6 +41,12 @@ Promoted as-is; no remediation. The `promote-skill` review found zero portabilit
 No companion files. fork is the first promoted skill whose runtime `SKILL.md` is itself the adapted-from-Pocock artifact (architect-deep and explore-idea carried their Pocock content in separate companion files instead). The attribution is file-level, so the whole `SKILL.md` moves intact.
 
 Source-of-truth moved from `~/dev/niftymonkey/claude/skills/fork/` to `~/dev/niftymonkey/skills/skills/fork/` + `history/fork.md`.
+
+### 2026-08-02, v3 (model-invocable)
+
+`disable-model-invocation: true` removed from the frontmatter, so the skill is reachable by the model rather than only by `/fork`. Made in `77c8ca0d2b` alongside the same change to `continue`, to match how both actually run: the moment to fork a task off is one the model notices mid-work, not one the user interrupts to request.
+
+Written up retrospectively. The commit changed both skills and updated neither history file, which is the step `/iterate-skill` exists to make automatic.
 
 ## Design uncertainties
 

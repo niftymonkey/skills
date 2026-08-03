@@ -124,7 +124,15 @@ Adds a three-tier triage for what an in-place update keeps, collapses, or gradua
 - [SKILL.md:90-92] New "Redact secrets" subsection: strip keys, tokens, passwords, connection strings, and PII before writing. A gitignored handoff can still be screen-shared or accidentally committed.
 - [SKILL.md] Swept 7 em dashes and 1 en dash to commas, colons, and parentheses. The file predated the no-em-dash rule.
 
-### 2026-08-02: v8 (make the triage visible)
+### 2026-08-02: v8 (model-invocable, and make the triage visible)
+
+Two changes on the same day, from separate commits. The first went unrecorded at the time and is
+written up here retrospectively.
+
+- [SKILL.md, `77c8ca0d2b`] `disable-model-invocation: true` removed, so the skill is now reachable
+  by the model rather than only by `/continue`. Made to match how it actually runs: the handoff is
+  written at a context threshold, which is a moment the model recognises and the user often is not
+  watching for. Everything above describing the skill as user-triggered only predates this.
 
 The v7 triage was being followed in name and skipped in practice. Two of the user's handoffs had reached 33KB and 40KB, and the skill file had not changed since v7, so the drift was behavioural rather than a regression in the guidance.
 
@@ -137,7 +145,7 @@ The shape of the failure is the useful part. Of the three tiers, exactly one req
 
 - Whether the skill should also write a sibling `MEMORY.md` entry pointing at the handoff file, or whether keeping the two systems disjoint is intentional.
 - Whether to add automatic invocation triggers (e.g., on PreCompact) or keep it strictly user-triggered.
-- For non-Claude-Code agents that don't respect `disable-model-invocation: true`, whether the skill should add a stronger in-body discipline (*"only act on explicit user invocation"*) to deter eager phrase-matching triggers. Observe real behavior first.
+- ~~For non-Claude-Code agents that don't respect `disable-model-invocation: true`, whether the skill should add a stronger in-body discipline to deter eager phrase-matching triggers.~~ Moot since v8: the flag is gone and the skill is deliberately model-invocable everywhere. The live question is now the opposite one, whether it fires too eagerly without a threshold to anchor it.
 - No-template-shape: trusting the model to adapt the doc structure to the situation is the v4 bet (still in effect in v6). If outputs end up inconsistent or low-quality across runs, a lightweight schema (not a full template) may need to come back.
 - Non-git projects: the gitignore step in v6 uses `git check-ignore` which fails outside a git repo. The skill should detect non-git working directories and skip the gitignore step gracefully rather than surfacing an error. Not addressed in v6; observe real behavior first.
 
