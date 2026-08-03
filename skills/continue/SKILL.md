@@ -74,6 +74,10 @@ A handoff updated across many resume cycles accretes context that has gone cold:
 
 Collapse or drop something only against a citation: a commit, merged PR, or ADR that demonstrably captures its outcome. With nothing to point at, it is not safe to call cold, so it stays Active or graduates to Revisitable. When in doubt, never drop.
 
+**Report the triage in your reply, and never in the file.** Say what stayed Active, what was collapsed and the citation it was collapsed against, what is proposed for graduation, and anything you could not resolve and want decided. Name every category, including the empty ones.
+
+This is conversation output. It belongs nowhere on disk: the handoff carries the result of the triage, not the accounting of it, and a fresh session should never have to read the reasoning behind a decision already applied. Without the report, a run that skipped the triage is indistinguishable from a run that did it, because leaving everything Active is always defensible and always silent. That is how a handoff reaches tens of kilobytes while this section is nominally being followed.
+
 Graduating context to an ADR or `docs/` file creates a committed artifact, unlike the gitignored handoff. Propose each promotion and let the user confirm; do not create the file silently.
 
 ### Don't duplicate other artifacts

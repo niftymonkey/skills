@@ -1,7 +1,7 @@
 ---
 skill: continue
 created: 2026-05-06
-current-version: v7
+current-version: v8
 status: published
 ---
 
@@ -123,6 +123,15 @@ Adds a three-tier triage for what an in-place update keeps, collapses, or gradua
 - [SKILL.md:68-78] New "Keep the handoff current" Content guidance subsection. Three tiers: Active stays inline verbatim; Superseded collapses to a one-line verdict; Revisitable graduates to an ADR, project context doc, or `docs/`. Dropping is citation-gated (a commit, PR, or ADR must capture the outcome). Promotions are proposed, not silently created.
 - [SKILL.md:90-92] New "Redact secrets" subsection: strip keys, tokens, passwords, connection strings, and PII before writing. A gitignored handoff can still be screen-shared or accidentally committed.
 - [SKILL.md] Swept 7 em dashes and 1 en dash to commas, colons, and parentheses. The file predated the no-em-dash rule.
+
+### 2026-08-02: v8 (make the triage visible)
+
+The v7 triage was being followed in name and skipped in practice. Two of the user's handoffs had reached 33KB and 40KB, and the skill file had not changed since v7, so the drift was behavioural rather than a regression in the guidance.
+
+The shape of the failure is the useful part. Of the three tiers, exactly one requires talking to the user: Revisitable, the bucket for real knowledge not tied to current focus and not captured in any durable artifact, which has to be proposed rather than silently created. Classifying everything as Active instead is silent, always defensible under "when in doubt, never drop", and indistinguishable from having done the work. The compliant path and the lazy path were the same path.
+
+- [SKILL.md] "Keep the handoff current" now requires reporting the triage in the reply: what stayed Active, what was collapsed and against which citation, what is proposed for graduation, and anything unresolved. Empty categories must be named too, so an empty report is a visible claim rather than an absence.
+- The report is explicitly conversation output and is written nowhere. The handoff carries the result of the triage, not the accounting of it. Adding a file, or a section in the handoff, would charge every future session for reasoning behind a decision that has already been applied, which is the exact cost this section exists to prevent.
 
 ## Design uncertainties
 
