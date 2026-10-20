@@ -1,6 +1,6 @@
 ---
 name: explore-idea
-description: Interview the user one question at a time through every decision an idea implies, taking it from a raw just-thought-of-it notion to a written artifact: Problem/Opportunity, Target Users, Core Requirements, Key Decisions, Constraints, Open Questions, the outline of a PRD. Use whenever an idea should survive the conversation as a document, including when the user says "grill me" about one. Use grilling instead when you only need to think something through out loud and nothing needs writing down.
+description: 'Interview the user one question at a time through every decision an idea implies, taking it from a raw just-thought-of-it notion to a written artifact: Problem/Opportunity, Target Users, Core Requirements, Key Decisions, Constraints, Open Questions, the outline of a PRD. Use whenever an idea should survive the conversation as a document, including when the user says "grill me" about one. Use grilling instead when you only need to think something through out loud and nothing needs writing down.'
 disable-model-invocation: true
 ---
 
